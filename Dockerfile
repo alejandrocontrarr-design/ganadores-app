@@ -19,4 +19,4 @@ RUN echo "server { listen 80; index index.php index.html; root /var/www/public; 
 
 EXPOSE 80
 
-CMD php-fpm -D && nginx -g "daemon off;"
+CMD php artisan migrate --force && php artisan config:cache && php-fpm -D && nginx -g "daemon off;"
