@@ -1,0 +1,1 @@
+<img src="{{ asset('images/logo.png') }}" alt="Exa FM" {{ $attributes->merge(['class' => 'h-24 w-auto mx-auto']) }}>
