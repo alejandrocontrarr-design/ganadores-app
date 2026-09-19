@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
-var_dump($this->app->environment(), '123', '56', env('APP_ENV'));
+var_dump($this->app->environment());
         if (env('APP_ENV') == 'production' || request()->header('x-forwarded-proto') === 'https') {
             URL::forceScheme('https');
         }
