@@ -3,7 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Pagination\Paginator; // <-- 1. Importar la clase Paginator
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\URL; // Importamos la fachada URL
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Paginator::useBootstrapFive(); // <-- 2. Agregar esta línea
+        Paginator::useBootstrapFive();
+var_dump($this->app->environment());
+        if (env('APP_ENV') == 'production' || request()->header('x-forwarded-proto') === 'https') {
+            URL::forceScheme('https');
+        }
     }
 }
