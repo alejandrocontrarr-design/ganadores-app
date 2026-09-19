@@ -129,7 +129,7 @@
                 @endauth
 
                 <a href="{{ route('ganadores.export') }}" class="btn btn-outline-success">
-                    📊 Exporta a Excel
+                    📊 Excel
                 </a>
 
                 @if(Auth::check() && Auth::user()->email !== 'exa@invitado.com')
