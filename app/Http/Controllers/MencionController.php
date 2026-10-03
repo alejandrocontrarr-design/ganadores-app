@@ -17,7 +17,7 @@ class MencionController extends Controller
         $ano = $request->input('ano', now('America/Mexico_City')->format('Y'));
 
         // Calcular días del mes y el primer día de la semana
-        $diasEnMes = cal_days_in_month(CAL_GREGORIAN, (int)$mes, (int)$ano);
+        $diasEnMes = \Carbon\Carbon::createFromDate($ano, $mes, 1)->daysInMonth;
         $primerDiaSemana = date('w', strtotime("$ano-$mes-01"));
 
         // Obtener las menciones de ese mes y año ordenadas
