@@ -37,7 +37,7 @@ class MencionController extends Controller
         $accion = $request->input('accion', 'guardar');
         $mencionId = $request->input('mencion_id');
 
-        // 1. ACCIÓN: MARCAR MENCIÓN
+       // 1. ACCIÓN: MARCAR MENCIÓN
         if ($accion === 'marcar') {
             $mencion = Mencion::findOrFail($mencionId);
             $horaManual = $request->input('hora_manual');
@@ -47,11 +47,11 @@ class MencionController extends Controller
                     // Si escribiste hora manual, se respeta tal cual
                     $mencion->marcado_at = Carbon::parse($mencion->fecha . ' ' . $horaManual, 'America/Mexico_City');
                 } catch (\Exception $e) {
-                    $mencion->marcado_at = Carbon::now('America/Mexico_City')->subHour();
+                    $mencion->marcado_at = Carbon::now('America/Mexico_City');
                 }
             } else {
-                // Si usas el botón automático, aplicamos subHour() para corregir el desfase de PHP
-                $mencion->marcado_at = Carbon::now('America/Mexico_City')->subHour();
+                // Usamos la hora actual exacta sin restar ninguna hora
+                $mencion->marcado_at = Carbon::now('America/Mexico_City');
             }
 
             $mencion->save();
