@@ -82,12 +82,16 @@
             border: 1px solid #ffe69c;
             border-radius: 8px;
         }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body class="p-0 m-0">
 
-    {{-- LA BARRA LATERAL SOLO SE RENDERIZA SI NO ES INVITADO --}}
-    @if(Auth::check() && Auth::user()->email !== 'exa@invitado.com')
+    {{-- SE RENDERIZA EL SIDEBAR PARA TODOS LOS USUARIOS AUTENTICADOS --}}
+    @auth
         <!-- Capa Oscura de Fondo para el Sidebar -->
         <div id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
@@ -99,12 +103,22 @@
             </div>
 
             <ul class="nav nav-pills flex-column mb-auto gap-2">
+                <!-- Opción de Menciones (Visible para todos) -->
                 <li class="nav-item">
-                    <button class="btn btn-danger w-100 text-start d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#modalEliminarAno">
-                        <span>🗑️ Eliminar por Año</span>
-                        <span class="badge bg-light text-danger">Admin</span>
-                    </button>
+                    <a href="{{ route('menciones.index') }}" class="btn btn-outline-light w-100 text-start d-flex justify-content-between align-items-center">
+                        <span>🎙️ Menciones</span>
+                    </a>
                 </li>
+
+                <!-- Opción de Eliminar por Año (Solo Administrador) -->
+                @if(Auth::user()->email !== 'exa@invitado.com')
+                    <li class="nav-item">
+                        <button class="btn btn-danger w-100 text-start d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#modalEliminarAno">
+                            <span>🗑️ Eliminar por Año</span>
+                            <span class="badge bg-light text-danger">Admin</span>
+                        </button>
+                    </li>
+                @endif
             </ul>
 
             <div class="border-top border-secondary pt-3 mt-auto">
@@ -112,19 +126,20 @@
                 <div class="fw-bold text-truncate">{{ Auth::user()->name ?? Auth::user()->email }}</div>
             </div>
         </div>
-    @endif
+    @endauth
 
-    <!-- Contenido Principal - Ocupa 100% real sin márgenes extraños -->
+    <!-- Contenido Principal -->
     <div class="container-fluid px-3 py-3 bg-white shadow-none w-100" style="min-height: 100vh;">
         
         <!-- Header Principal -->
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2 border-bottom pb-3">
             <div class="d-flex align-items-center gap-3">
-                @if(Auth::check() && Auth::user()->email !== 'exa@invitado.com')
+                <!-- Botón de menú accesible para cualquier usuario logueado -->
+                @auth
                     <button class="btn btn-outline-dark" onclick="toggleSidebar()" title="Abrir Menú">
                         ☰
                     </button>
-                @endif
+                @endauth
 
                 <img src="{{ asset('images/logo.png') }}" alt="Exa FM" class="header-logo">
                 <h2 class="m-0 fw-bold text-dark">Control de Ganadores y Dinámicas</h2>
@@ -147,7 +162,7 @@
                 </a>
 
                 @auth
-                    <!-- Habilitado para todos los usuarios autenticados (incluyendo invitado) -->
+                    <!-- Habilitado para todos los usuarios autenticados -->
                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
                         + Nuevo Registro
                     </button>
@@ -223,7 +238,7 @@
             </div>
         </div>
 
-        <!-- Tabla de Registros w-100 -->
+        <!-- Tabla de Registros -->
         <div class="table-responsive w-100">
             <table class="table table-bordered table-hover align-middle w-100 m-0">
                 <thead>
@@ -376,7 +391,7 @@
 
     </div>
 
-    <!-- Modal: Nuevo Ganador (Fuera de la restricción del invitado para que puedan usarlo) -->
+    <!-- Modal: Nuevo Ganador -->
     @auth
         <div class="modal fade" id="modalCrear" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-xl">
@@ -480,7 +495,7 @@
                             </div>
 
                             <div class="alert alert-warning small mb-0">
-                                ⚠️ <strong>Atención:</strong> Esta acción no se puede deshacer.
+                                ⚠ <strong>Atención:</strong> Esta acción no se puede deshacer.
                             </div>
                         </div>
                         
