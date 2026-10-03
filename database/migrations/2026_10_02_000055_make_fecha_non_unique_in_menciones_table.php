@@ -9,11 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('menciones', function (Blueprint $table) {
-            try {
-                // Intenta eliminar el índice único de forma segura
-                $table->dropUnique(['fecha']);
-            } catch (\Exception $e) {
-                // Si el índice no existe, la excepción es atrapada y continúa el despliegue
+            // Verifica si el índice existe antes de intentar borrarlo
+            if (Schema::hasIndex('menciones', 'menciones_fecha_unique')) {
+                $table->dropUnique('menciones_fecha_unique');
             }
         });
     }
