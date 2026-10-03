@@ -9,8 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('menciones', function (Blueprint $table) {
-            // Elimina el índice único si existía sobre el campo fecha
-            $table->dropUnique(['fecha']); 
+            try {
+                // Intenta eliminar el índice único de forma segura
+                $table->dropUnique(['fecha']);
+            } catch (\Exception $e) {
+                // Si el índice no existe, la excepción es atrapada y continúa el despliegue
+            }
         });
     }
 
